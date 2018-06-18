@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html>
+<title>Modelo</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="w3.css">
+<body  background="background2.jpg">
+
+<br/><br/><br/>
+<div class="w3-card-4" style="width:60%; margin:0 auto;">
+  <header class="w3-container w3-black">
+    <h1>Modelo LEP (Lote económico de producción)</h1>
+  </header>
+  <br/>
+  <div>
+    <input class="w3-half w3-input w3-border" type="number" placeholder="Q: Cantidad de unidades por pedido" id="Q">
+  </div><br/><br/><br/>
+  <div>
+    <input class="w3-half w3-input w3-border" type="number" placeholder="EOQ: Cantidad óptima de unidades por pedido" id="EOQ">
+  </div><br/><br/><br/>
+  <div>
+    <input class="w3-half w3-input w3-border" type="number" placeholder="D: Demanda de unidades" id="D">
+  </div><br/><br/><br/>
+  <div>
+    <input class="w3-half w3-input w3-border" type="number" placeholder="C: Costo por unidad" id="C">
+  </div><br/><br/><br/>
+  <div>
+    <input class="w3-half w3-input w3-border" type="number" placeholder="S: Costo de ordenar" id="S">
+  </div><br/><br/><br/>
+  <div>
+    <input class="w3-half w3-input w3-border" type="number" placeholder="H: Costo de mantener" id="H">
+  </div><br/><br/><br/>
+  <div>
+    <input class="w3-half w3-input w3-border" type="number" placeholder="CT: Costo total" id="CT">
+  </div><br/><br/><br/>
+  <div>
+    <input class="w3-half w3-input w3-border" type="number" placeholder="d: Demanda diaria promedio" id="d">
+  </div><br/><br/><br/>
+  <div>
+    <input class="w3-half w3-input w3-border" type="number" placeholder="T: Tiempo de entrega" id="T">
+  </div><br/><br/><br/>
+  <div>
+    <input class="w3-half w3-input w3-border" type="number" placeholder="N: Numero esperado de ordenes" id="N">
+  </div><br/><br/><br/>
+  <div>
+    <input class="w3-half w3-input w3-border" type="number" placeholder="R: Punto de reorden" id="R">
+  </div><br/><br/><br/>
+  <div>
+    <input class="w3-half w3-input w3-border" type="number" placeholder="dt: Días de trabajo por año" id="dt">
+  </div><br/><br/><br/>
+
+
+  <div>
+    <div class="w3-col" style="width:75px;">.</div>
+    <button class="w3-third w3-button w3-black" onclick="calcular();">Calcular</button>
+    <div class="w3-col" style="width:75px;">.</div>
+    <select id="select" class="w3-select w3-third" name="option">
+      <option value="" disabled selected>Seleccion la variable</option>
+      <option value="1">Q Cantidad de unidades por pedido</option>
+      <option value="2">Q* Cantidad óptima de unidades por pedido</option>
+      <option value="3">D Demanda de unidades</option>
+      <option value="4">C Costo por unidad</option>
+      <option value="5">S Costo de ordenar</option>
+      <option value="6">H Costo de mantener</option>
+      <option value="7">CT Costo total</option>
+      <option value="8">d Demanda diaria promedio</option>
+      <option value="9">T Tiempo de entrega</option>
+      <option value="10">N Número esperado de órdenes</option>
+      <option value="11">R Punto de reorden</option>
+    </select>
+  </div>
+
+  <br/><br/><br/>
+
+  <footer class="w3-container w3-black">
+    <h5> . </h5>
+  </footer>
+</div>
+<br/><br/><br/>
+
+
+  <div class="w3-panel w3-black w3-display-middle" id="carta" style="width:50%; display:none;">
+    <span onclick="this.parentElement.style.display='none'"
+      class="w3-button w3-black w3-large w3-display-topright">&times;</span>
+    <h3 id="cosa">El valor de </h3>
+    <p id="respuesta"></p>
+  </div>
+
+
+
+<script>
+
+function calcular(){
+  var select=document.getElementById("select").value;
+  document.getElementById("respuesta").innerHTML="";//vacío el resultado anterior
+  document.getElementById("carta").style.display="block";
+  if(select=="1"){
+    document.getElementById("cosa").innerHTML="El valor de Q es:";
+    document.getElementById("respuesta").innerHTML=calcularQ();}
+  if(select=="2"){
+    document.getElementById("cosa").innerHTML="El valor de Q* es:";
+    document.getElementById("respuesta").innerHTML=calcularEOQ();}
+  if(select=="3"){
+    document.getElementById("cosa").innerHTML="El valor de D es:";
+    document.getElementById("respuesta").innerHTML=calcularD();}
+  if(select=="4"){
+    document.getElementById("cosa").innerHTML="El valor de C es:";
+    document.getElementById("respuesta").innerHTML=calcularC();}
+  if(select=="5"){
+    document.getElementById("cosa").innerHTML="El valor de S es:";
+    document.getElementById("respuesta").innerHTML=calcularS();}
+  if(select=="6"){
+    document.getElementById("cosa").innerHTML="El valor de H es:";
+    document.getElementById("respuesta").innerHTML=calcularH();}
+  if(select=="7"){
+    document.getElementById("cosa").innerHTML="El valor de CT es:";
+    document.getElementById("respuesta").innerHTML=calcularCT();}
+  if(select=="8"){
+    document.getElementById("cosa").innerHTML="El valor de d es:";
+    document.getElementById("respuesta").innerHTML=calculard();}
+  if(select=="9"){
+    document.getElementById("cosa").innerHTML="El valor de T es:";
+    document.getElementById("respuesta").innerHTML=calcularT();}
+  if(select=="10"){
+    document.getElementById("cosa").innerHTML="El valor de N es:";
+    document.getElementById("respuesta").innerHTML=calcularN();}
+  if(select=="11"){
+    document.getElementById("cosa").innerHTML="El valor de R es:";
+    document.getElementById("respuesta").innerHTML=calcularR();}
+}
+
+function calcularQ(){
+  var Q=parseFloat(document.getElementById("Q").value);
+  if(isNaN(Q)==true){/*
+    var CT = calcularCT();
+    var C = calcularC();
+    var S = calcularS();
+    var H = calcularH();
+    var D = calcularD();
+    Q= (2*(CT-D*C)+Math.sqrt((CT-D*C)*(CT-D*C)-4*H*D*S))/(2*H);
+    return Q;*/
+    Q=calcularEOQ();
+    return Q;
+  }
+  return Q;
+}
+
+function calcularEOQ(){
+  var EOQ=parseFloat(document.getElementById("EOQ").value);
+  if(isNaN(EOQ)==true){
+    var D = calcularD();
+    var H = calcularH();
+    var S = calcularS();
+    EOQ = Math.sqrt((2*D*S)/H);
+    return EOQ;
+  }
+  else{
+    return EOQ;
+  }
+}
+
+function calcularD(){
+  var D=parseFloat(document.getElementById("D").value);
+  if(isNaN(D)==true){
+    var CT=calcularCT();
+    var N=calcularN();
+    var Q=calcularQ();
+    var S=calcularS();
+    var H=calcularH();
+    var C=calcularC();
+    var EOQ=calcularEOQ();
+    if(isNaN(N)==true && isNaN(EOQ)==true){
+      D=N/EOQ;
+      return D;
+    }
+    else if(isNaN(CT)==true && isNaN(Q)==true && isNaN(H)==true && isNaN(S)==true && isNaN(C)==true){
+      D=(CT-(Q/2*H))/(C+S/Q);
+      return D;
+    }
+  }
+  else{
+    return D;
+  }
+}
+
+function calcularC(){
+  var C=parseFloat(document.getElementById("C").value);
+  return C;
+}
+
+function calcularS(){
+  var S=parseFloat(document.getElementById("S").value);
+  if(isNaN(S)==true){
+    var D = calcularD();
+    var Q = calcularQ();
+    S=D*S/Q;
+    return S;
+  }
+  return S;
+}
+
+function calcularH(){
+  var H=parseFloat(document.getElementById("H").value);
+  return H;
+}
+
+function calcularCT(){
+  var CT=parseFloat(document.getElementById("CT").value);
+  if(isNaN(CT)==true){
+    var S = calcularS();
+    var H = calcularH();
+    var D = calcularD();
+    var Q = calcularQ();
+    var C = calcularH();
+    CT=(D*C)+(D*S/Q)+(Q*H/2);
+    return CT;
+  }
+  else{
+    return CT;
+  }
+}
+
+function calculard(){
+  var d=parseFloat(document.getElementById("d").value);
+  if(isNaN(d)==true){
+    var D=parseFloat(document.getElementById("D").value);
+    var dt=parseFloat(document.getElementById("dt").value);
+    d=D/dt;
+    return d;
+  }
+  return d;
+}
+
+function calcularT(){
+  var T=parseFloat(document.getElementById("T").value);
+  if(isNaN(T)==true){
+    var dt=parseFloat(document.getElementById("dt").value);
+    var N=calcularN();
+    T=dt/N;
+    return T;
+  }
+  else{
+    return T;}
+}
+
+function calcularN(){
+  var N=parseFloat(document.getElementById("N").value);
+  if(isNaN(N)==true){
+    var D=calcularD();
+    var EOQ=calcularEOQ();
+    N=D/EOQ;
+    return N;
+  }
+  else {
+    return N;
+  }
+}
+
+function calcularR(){
+  var R=parseFloat(document.getElementById("R").value);
+  if(isNaN(R)==true){
+    var d = calculard();
+    var T = calcularT();
+    R = d*T;
+    return R;
+  }
+  return R;
+}
+
+/*
+function encrypt(){
+  var modulo=parseInt(document.getElementById("modulo").value);
+  var alpha=parseInt(document.getElementById("alpha").value);
+  var beta=parseInt(document.getElementById("beta").value);
+  res=euclidex(alpha,modulo);
+  if(res[2]>1){
+    alert("Invalid alpha, must be...gdc(alpha,modulo)=1");}
+  else{
+    var message=document.getElementById("message").value;
+    var ciphertext="";
+    for(var i=0;i<message.length;i++){
+      ciphertext=ciphertext.concat(String.fromCharCode(((((message.charCodeAt(i)-97)*alpha)+beta)%modulo)+65));}
+    document.getElementById("ciphertext").value=ciphertext;}
+}
+
+function euclidex(a,b){
+  if(a%b==0){
+    return [0,1,b];
+  }
+  else{
+    var temp=euclidex(b,a%b);
+    m=temp[0];
+    n=temp[1];
+    r=temp[2];
+    return [n,m-parseInt(a/b)*n,r];
+  }
+}
+*/
+</script>
+</body>
+</html>
